@@ -1,0 +1,89 @@
+{% extends "layout.html" %} {% block body %}
+<main>
+    <article>
+        <h2>今日の使用車両</h2>
+        <table class="car_table">
+            <tr>
+                <th>号車</th>
+                <th>車両PRJ</th>
+                <th>使用開始予定</th>
+                <th>使用終了予定</th>
+                <th>担当者</th>
+            </tr>
+            <tr>
+                <td>E4567</td>
+                <td>A-10</td>
+                <td>2017-10-03 10:30</td>
+                <td>2017-10-10 17:15</td>
+                <td>太郎</td>
+            </tr>
+        </table>
+    </article>
+    <article>
+        <h2>返却日が近い車両</h2>
+        <table class="car_table">
+            <tr>
+                <th>号車</th>
+                <th>車両PRJ</th>
+                <th>使用開始予定</th>
+                <th>使用終了予定</th>
+                <th>担当者</th>
+                <th>返却日まで</th>
+            </tr>
+            <tr>
+                <td>Z8908</td>
+                <td>F-15</td>
+                <td>2017-10-03 10:30</td>
+                <td>2017-10-10 17:15</td>
+                <td>本田</td>
+                <td>あと1日</td>
+            </tr>
+        </table>
+    </article>
+    <article>
+        <h2>車両日程</h2>
+        <form class="one_line" action="{{ url_for('add_entry') }}" method="post">
+            <span>車両：</span>
+            <select name="car_id">
+                {% for car in cars %}
+                    <option value="{{ car.car_id }}">{{ car.car_code }}</option>
+                {% endfor %}
+            </select>
+            <span>開始：</span>
+            <input type="date" value="2018-01-11" name="start_date">
+            <input type="time" value="00:00" min="00:00:00" max="24:00:00" name="start_time">
+            <span>終了：</span>
+            <input type="date" value="2018-01-11" name="end_date">
+            <input type="time" value="00:00" min="00:00:00" max="24:00:00" name="end_time">
+            <span>担当者：</span>
+            <select name="person">
+                {% for person in persons %}
+                    <option value="{{ person.person_id }}">{{ person.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="予約する">
+        </form>
+
+        <table class="car_table">
+            <tr>
+                <th>号車</th>
+                <th>車両PRJ</th>
+                <th>使用開始予定</th>
+                <th>使用終了予定</th>
+                <th>担当者</th>
+                <th>返却日まで</th>
+            </tr>
+            {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.car_code }}</td>
+                <td>{{ reservation.car_prj_code}}</td>
+                <td>{{ reservation.start_datetime }}</td>
+                <td>{{ reservation.end_datetime }}</td>
+                <td>{{ reservation.name }}</td>
+                <td>あと1日</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </article>
+</main>
+{% endblock %}

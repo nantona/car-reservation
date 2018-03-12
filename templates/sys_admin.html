@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body %}
+<main>
+    <article>
+        <h2>車両プロジェクト</h2>
+        <form class="one_line" action="{{ url_for('add_car_prj') }}" method="post">
+            <span>車両プロジェクト登録：</span>
+            <input type="text" name="car_prj_code">
+            <input type="submit" value="登録する">
+        </form>
+    </article>
+    <article>
+        <h2>車両プロジェクト一覧</h2>
+        <table class="car_table">
+            <tr>
+                <th>車両プロジェクト</th>
+            </tr>
+            {% for car_project in car_projects %}
+            <tr>
+                <td>{{ car_project.car_prj_code }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </article>
+</main>
+{% endblock %}
+
