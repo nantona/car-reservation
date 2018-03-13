@@ -16,13 +16,13 @@
             <h1>車両予約</h1>
             <ul>
                 <li>
-                    <a id="active" href="{{ url_for('show_entries') }}">Home</a>
+                    <a href="{{ url_for('show_entries') }}">Home</a>
                 </li>
                 <li>
                     <a href="{{ url_for('show_cars') }}">車両管理</a>
                 </li>
                 <li>
-                    <a href="#">システム管理</a>
+                    <a href="{{ url_for('show_sys_info') }}">システム管理</a>
                 </li>
             </ul>
         </nav>

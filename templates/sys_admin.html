@@ -22,6 +22,28 @@
             {% endfor %}
         </table>
     </article>
+    <article>
+        <h2>ユーザー登録</h2>
+        <form class="one_line" action="{{ url_for('add_person') }}" method="post">
+            <span>ユーザー登録：</span>
+            <input type="text" name="user_name">
+            <input type="submit" value="登録する">
+        </form>
+    </article>
+    <article>
+        <h2>ユーザー一覧</h2>
+        <table class="car_table">
+            <tr>
+                <th>ユーザー</th>
+            </tr>
+            {% for person in persons %}
+            <tr>
+                <td>{{ person.name }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </article>
+
 </main>
 {% endblock %}
 

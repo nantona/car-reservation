@@ -35,7 +35,7 @@ def close_db(error):
         g.sqlite_db.close()
 
 
-@app.route('/', methods=['GET'])
+@app.route('/reservations', methods=['GET'])
 def show_entries():
     db = get_db()
     cur = db.execute(
@@ -54,12 +54,12 @@ def show_entries():
     return render_template('show_entries.html', reservations=reservations, cars=cars, persons=persons)
 
 
-@app.route('/', methods=['POST'])
+@app.route('/reservations', methods=['POST'])
 def add_entry():
     db = get_db()
     db.execute(
         """
-        INSERT INTO reservation (car_id, person_id, start_datetime, end_datetime)
+        INSERT INTO reservations (car_id, person_id, start_datetime, end_datetime)
         VALUES (?, ?, ?, ?)
         """,
         [request.form['car_id'],
@@ -72,7 +72,7 @@ def add_entry():
     return redirect(url_for('show_entries'))
 
 
-@app.route('/car_admin', methods=['GET'])
+@app.route('/cars', methods=['GET'])
 def show_cars():
     db = get_db()
     cur = db.execute(
@@ -89,7 +89,7 @@ def show_cars():
     return render_template('car_admin.html', cars=cars, car_projects=car_projects)
 
 
-@app.route('/car_admin', methods=['POST'])
+@app.route('/cars', methods=['POST'])
 def add_car():
     db = get_db()
     db.execute(
@@ -102,15 +102,17 @@ def add_car():
     return redirect(url_for('show_cars'))
 
 
-@app.route('/sys_admin', methods=['GET'])
+@app.route('/system-info', methods=['GET'])
 def show_sys_info():
     db = get_db()
     cur = db.execute('SELECT car_prj_code FROM car_projects')
     car_projects = cur.fetchall()
-    return render_template('sys_admin.html', car_projects=car_projects)
+    cur = db.execute('SELECT name FROM persons')
+    persons = cur.fetchall()
+    return render_template('sys_admin.html', car_projects=car_projects, persons=persons)
 
 
-@app.route('/sys_admin', methods=['POST'])
+@app.route('/system-info/car-projects', methods=['POST'])
 def add_car_prj():
     db = get_db()
     db.execute(
@@ -119,6 +121,16 @@ def add_car_prj():
         VALUES (?)
         ''',
         [request.form['car_prj_code']])
+    db.commit()
+    return redirect(url_for('show_sys_info'))
+
+
+@app.route('/system-info/persons', methods=['POST'])
+def add_person():
+    db = get_db()
+    db.execute(
+        "INSERT INTO persons (name) VALUES (?)",
+        [request.form['user_name']])
     db.commit()
     return redirect(url_for('show_sys_info'))
 
