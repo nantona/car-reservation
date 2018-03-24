@@ -1,7 +1,8 @@
 import os
 import datetime
 import sqlite3
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
+import json
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -40,10 +41,24 @@ def show_entries():
     db = get_db()
     cur = db.execute(
         """
-        SELECT car_code, name, car_prj_code, start_datetime, end_datetime
-        FROM ((reservations INNER JOIN cars ON reservations.car_id = cars.car_id)
-        INNER JOIN persons ON reservations.person_id = persons.person_id)
-        INNER JOIN car_projects ON cars.car_prj_id = car_projects.car_prj_id;
+        SELECT
+            reservation_id,
+            car_code, name,
+            car_prj_code,
+            start_datetime,
+            end_datetime
+        FROM
+            (
+                (
+                    reservations
+                    INNER JOIN cars
+                    ON reservations.car_id = cars.car_id
+                )
+                INNER JOIN persons
+                ON reservations.person_id = persons.person_id
+            )
+        INNER JOIN car_projects
+        ON cars.car_prj_id = car_projects.car_prj_id;
         """
     )
     reservations = cur.fetchall()
@@ -70,6 +85,21 @@ def add_entry():
     print(request.form["end_date"] + " " + request.form["end_time"])
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
+
+
+@app.route('/reservations/<int:reservation_id>', methods=['DELETE'])
+def delete_reservation(reservation_id):
+    db = get_db()
+    db.execute("DELETE FROM reservations WHERE reservation_id = ?", [str(reservation_id)])
+    db.commit()
+    
+    return_data = {'status':'success','reservation_id':reservation_id}
+    return jsonify(result=return_data)
+
+
+@app.route('/reservations/<int:reservation_id>', methods=['PUT'])
+def update_reservation(reservation_id):
+    return ('updated reservation sccess. id=' + str(reservation_id))
 
 
 @app.route('/cars', methods=['GET'])

@@ -72,15 +72,20 @@
                 <th>使用終了予定</th>
                 <th>担当者</th>
                 <th>返却日まで</th>
+                <th></th>
             </tr>
             {% for reservation in reservations %}
-            <tr>
+            <tr id="{{reservation.reservation_id}}">
                 <td>{{ reservation.car_code }}</td>
                 <td>{{ reservation.car_prj_code}}</td>
                 <td>{{ reservation.start_datetime }}</td>
                 <td>{{ reservation.end_datetime }}</td>
                 <td>{{ reservation.name }}</td>
                 <td>あと1日</td>
+                <td>
+                    <button class="rep" id="{{reservation.reservation_id}}">変更</button>
+                    <button class="del" id="{{reservation.reservation_id}}">削除</button>
+                </td>
             </tr>
             {% endfor %}
         </table>
