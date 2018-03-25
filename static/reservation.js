@@ -1,4 +1,4 @@
-$(function init() {
+//$(function init() {
     $("button.rep").click(function() {
         $.ajax({
             type: "PUT",
@@ -20,4 +20,4 @@ $(function init() {
             }
         });
     });
-});
+//});

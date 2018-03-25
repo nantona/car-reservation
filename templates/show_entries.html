@@ -1,8 +1,8 @@
 {% extends "layout.html" %} {% block body %}
-<main>
-    <article>
-        <h2>今日の使用車両</h2>
-        <table class="car_table">
+<article>
+    <h3>今日の使用車両</h3>
+    <table class="table table-sm">
+        <thead class="thead-light">
             <tr>
                 <th>号車</th>
                 <th>車両PRJ</th>
@@ -10,18 +10,20 @@
                 <th>使用終了予定</th>
                 <th>担当者</th>
             </tr>
-            <tr>
-                <td>E4567</td>
-                <td>A-10</td>
-                <td>2017-10-03 10:30</td>
-                <td>2017-10-10 17:15</td>
-                <td>太郎</td>
-            </tr>
-        </table>
-    </article>
-    <article>
-        <h2>返却日が近い車両</h2>
-        <table class="car_table">
+        </thead>
+        <tr>
+            <td>E4567</td>
+            <td>A-10</td>
+            <td>2017-10-03 10:30</td>
+            <td>2017-10-10 17:15</td>
+            <td>太郎</td>
+        </tr>
+    </table>
+</article>
+<article>
+    <h3>返却日が近い車両</h3>
+    <table class="table table-sm">
+        <thead class="thead-light">
             <tr>
                 <th>号車</th>
                 <th>車両PRJ</th>
@@ -30,65 +32,136 @@
                 <th>担当者</th>
                 <th>返却日まで</th>
             </tr>
-            <tr>
-                <td>Z8908</td>
-                <td>F-15</td>
-                <td>2017-10-03 10:30</td>
-                <td>2017-10-10 17:15</td>
-                <td>本田</td>
-                <td>あと1日</td>
-            </tr>
-        </table>
-    </article>
-    <article>
-        <h2>車両日程</h2>
-        <form class="one_line" action="{{ url_for('add_entry') }}" method="post">
-            <span>車両：</span>
-            <select name="car_id">
-                {% for car in cars %}
-                    <option value="{{ car.car_id }}">{{ car.car_code }}</option>
-                {% endfor %}
-            </select>
-            <span>開始：</span>
-            <input type="date" value="2018-01-11" name="start_date">
-            <input type="time" value="00:00" min="00:00:00" max="24:00:00" name="start_time">
-            <span>終了：</span>
-            <input type="date" value="2018-01-11" name="end_date">
-            <input type="time" value="00:00" min="00:00:00" max="24:00:00" name="end_time">
-            <span>担当者：</span>
-            <select name="person">
-                {% for person in persons %}
-                    <option value="{{ person.person_id }}">{{ person.name }}</option>
-                {% endfor %}
-            </select>
-            <input type="submit" value="予約する">
-        </form>
+        </thead>
+        <tr>
+            <td>Z8908</td>
+            <td>F-15</td>
+            <td>2017-10-03 10:30</td>
+            <td>2017-10-10 17:15</td>
+            <td>本田</td>
+            <td>あと1日</td>
+        </tr>
+    </table>
+</article>
+<article>
+    <h3>車両日程</h3>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        予約する
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" , role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
 
-        <table class="car_table">
-            <tr>
-                <th>号車</th>
-                <th>車両PRJ</th>
-                <th>使用開始予定</th>
-                <th>使用終了予定</th>
-                <th>担当者</th>
-                <th>返却日まで</th>
-                <th></th>
-            </tr>
-            {% for reservation in reservations %}
-            <tr id="{{reservation.reservation_id}}">
-                <td>{{ reservation.car_code }}</td>
-                <td>{{ reservation.car_prj_code}}</td>
-                <td>{{ reservation.start_datetime }}</td>
-                <td>{{ reservation.end_datetime }}</td>
-                <td>{{ reservation.name }}</td>
-                <td>あと1日</td>
-                <td>
-                    <button class="rep" id="{{reservation.reservation_id}}">変更</button>
-                    <button class="del" id="{{reservation.reservation_id}}">削除</button>
-                </td>
-            </tr>
+                <div class="modal-header">
+                    <h5 class="modal-title">予約内容の変更</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="{{ url_for('add_entry') }}" method="post">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">車両</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" name="car_id">
+                                    {% for car in cars %}
+                                    <option value="{{ car.car_id }}">{{ car.car_code }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">開始</label>
+                            <div class="col-sm-10 row">
+                                <div class="col">
+                                    <input class="form-control" type="date" value="2018-01-11" name="start_date">
+                                </div>
+                                <div class="col">
+                                    <input class="form-control" type="time" value="00:00" min="00:00:00" max="24:00:00" name="start_time">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">終了</label>
+                            <div class="col-sm-10 row">
+                                <div class="col">
+                                    <input class="form-control" type="date" value="2018-01-11" name="end_date">
+                                </div>
+                                <div class="col">
+                                    <input class="form-control" type="time" value="00:00" min="00:00:00" max="24:00:00" name="end_time">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">担当者</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" name="person">
+                                    {% for person in persons %}
+                                    <option value="{{ person.person_id }}">{{ person.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary">予約する</button>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form class="form-inline mb-2" action="{{ url_for('add_entry') }}" method="post">
+        <label>車両：</label>
+        <select class="form-control form-control-sm mr-2" name="car_id">
+            {% for car in cars %}
+            <option value="{{ car.car_id }}">{{ car.car_code }}</option>
             {% endfor %}
-        </table>
-    </article>
-</main>
+        </select>
+        <label>開始：</label>
+        <input class="form-control form-control-sm mr-2" type="date" value="2018-01-11" name="start_date">
+        <input class="form-control form-control-sm mr-2" type="time" value="00:00" min="00:00:00" max="24:00:00" name="start_time">
+        <label>終了：</label>
+        <input class="form-control form-control-sm mr-2" type="date" value="2018-01-11" name="end_date">
+        <input class="form-control form-control-sm mr-2" type="time" value="00:00" min="00:00:00" max="24:00:00" name="end_time">
+        <label>担当者：</label>
+        <select class="form-control form-control-sm mr-2" name="person">
+            {% for person in persons %}
+            <option value="{{ person.person_id }}">{{ person.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-outline-primary btn-sm">予約する</button>
+    </form>
+
+    <table class="car_table table table-hover table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">号車</th>
+                <th scope="col">車種</th>
+                <th scope="col">使用開始予定</th>
+                <th scope="col">使用終了予定</th>
+                <th scope="col">担当者</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        {% for reservation in reservations %}
+        <tr id="{{reservation.reservation_id}}">
+            <td>{{ reservation.car_code }}</td>
+            <td>{{ reservation.car_prj_code}}</td>
+            <td>{{ reservation.start_datetime }}</td>
+            <td>{{ reservation.end_datetime }}</td>
+            <td>{{ reservation.name }}</td>
+            <td>
+                <button class="rep btn btn-outline-info btn-sm" id="{{reservation.reservation_id}}">変更</button>
+                <button class="del btn btn-outline-danger btn-sm" id="{{reservation.reservation_id}}">削除</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</article>
 {% endblock %}
